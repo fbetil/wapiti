@@ -1,0 +1,47 @@
+{{ define "content" }}
+<div id="index">
+	<p>Vous pouvez consulter les pages suivantes:</p>
+	<ul>
+		<li><a href="/packages" class="bold mdc-text-green-900">Liste des packages</a></li>
+		<li><a href="/scripts" class="bold mdc-text-green-900">Gestionnaire de scripts</a></li>
+		<li><a href="/rules" class="bold mdc-text-green-900">R&egrave;gles de d&eacute;ploiement</a></li>
+		<li><a href="/parameters" class="bold mdc-text-green-900">Param&egrave;tres de l'agent</a></li>
+		<li><a href="/logs" class="bold mdc-text-green-900">Journaux d'exploitation</a></li>
+	</ul>
+	<br>
+	<div id="processes">
+		<p class="h5-like"><i class="fa fa-tasks mrs"></i>Activit&eacute; du poste ({$sHtmlStartupMode} - {$sHtmlStartupUser})</p>
+		<div class="quote">
+			<table>
+				<thead>
+					<tr>
+						<th class="txtcenter">Processus</th>
+						<th class="txtcenter">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{$sHtmlActiveProcesses}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function processAction(action, name) {
+		var r = new XMLHttpRequest();
+		r.open("GET", "/process.do?action="+action+"&name="+name, true);
+		r.onreadystatechange = function () {
+			if (r.readyState != 4 || r.status != 200) return;
+			data = JSON.parse(r.responseText);
+			if(data.result == true){
+				showMessage("Demande prise en compte correctement");
+			}else{
+				showMessage(data.message, "error");
+			}
+		};
+		r.send();
+	}
+	var autoRefreshParams = {url: "/index", container: "#processes", timeout: 2000};
+	setTimeout(autoRefresh, autoRefreshParams.timeout);
+</script>
+{{ end }}

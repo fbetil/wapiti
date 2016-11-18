@@ -1,0 +1,95 @@
+/*    Base    */
+
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+	height: 100%;
+}
+
+a, a:visited, a:hover{
+	text-decoration: none;
+}
+
+tbody tr{
+	cursor: pointer;
+}
+tbody tr:hover{
+	background-color: #dcedc8;
+}
+
+.input > label{
+	font-weight: bold;
+	display: block;
+	margin: 10px;
+}
+.input > input, .input > select, .input > textarea {
+	display: block;
+	margin: 10px;
+}
+.input > input.w100, .input > select.w100, .input > textarea.w100 {
+	width: calc(100% - 20px);
+}
+.input > a {
+	padding: 5px 20px;
+	font-weight: bold;
+	border-radius: 4px;
+}
+
+.h200p {
+	height: 200px;
+}
+/*    Polices    */
+
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 300;
+	src: url('/assets/fonts/roboto-light.ttf');
+	src: local('Roboto Light'), local('Roboto-Light'), url('/assets/fonts/roboto-light.ttf') format('truetype');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+/*    Divers    */
+.quote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  /*padding: 0.5em 10px;*/
+  quotes: "\201C""\201D""\2018""\2019";
+}
+.bold{
+	font-weight: bold;
+}
+.italic{
+	font-style:italic;
+}
+
+/*    Layout    */
+#page{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+#header, #footer {
+  flex-shrink: 0;
+}
+#content {
+	flex-grow: 1;
+	overflow-y: auto;
+}
+#message {
+	width: 60%;
+	left: 20%;
+	position: absolute;
+	top: 50px;
+	padding: 5px;
+	border-radius: 10px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	transition: opacity ease-in-out 1s;
+	opacity: 0;
+}

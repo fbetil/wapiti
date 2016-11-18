@@ -1,0 +1,34 @@
+{{ define "content" }}
+<div id="parameters">
+	<p>Vous trouverez ci-dessous les param&egrave;tres actuels de l'agent Wapiti.</p>
+	<p class="h5-like"><i class="fa fa-cog mrs"></i>Param&egrave;tres locaux</p>
+	<div class="quote">
+	<table>
+		<thead>
+			<tr>
+				<th class="txtcenter">Nom</th>
+				<th class="txtcenter">Valeur</th>
+			</tr>
+		</thead>
+		<tbody>
+			{$sHtmlParameters}
+		</tbody>
+	</table>
+	</div>
+	<p class="h5-like"><i class="fa fa-sitemap mrs"></i>Informations du domaine</p>
+	<div class="quote">
+	<table>
+		<thead>
+			<tr>
+				<th class="txtcenter">Type</th>
+				<th class="txtcenter">Valeur</th>
+			</tr>
+		</thead>
+		<tbody>
+			{$sHtmlParametersGroups}
+			{$sHtmlParametersOUs}
+		</tbody>
+	</table>
+	</div>
+</div>
+{{ end }}

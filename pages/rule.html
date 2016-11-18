@@ -1,0 +1,48 @@
+{{ define "content" }}
+<div id="rule">
+	<p>Vous voici dans le concepteur de r&egrave;gle de d&eacute;ploiement de packages Wapiti.</p>
+	<p class="h5-like"><i class="fa fa-magic mrs"></i>Param&egrave;tres de la r&egrave;gle</p>
+	<div class="quote">
+		<input type="hidden" name="id" id="id" value="{$iId}">
+		<div class="input"><label for="rulename">Nom de la r&egrave;gle :</label><input type="text" name="rulename" id="rulename" class="w400p" value="{$sRuleName}"></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cog mrs"></i>Param&egrave;tres du package</p>
+	<div class="quote">
+		<div class="input"><label for="packagename">Nom du package :</label><input type="text" name="packagename" id="packagename" value="{$sPackageName}"></div>
+		<div class="input"><label for="packageversion">Version du package :</label><input type="text" class="w100p" name="packageversion" id="packageversion" value="{$sPackageVersion}"></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cog mrs"></i>Cibles du d&eacute;ploiement</p>
+	<div class="quote">
+		<div class="input"><textarea name="targetlist" id="targetlist" class="w100 h200p">{$sTargetList}</textarea></div>
+	</div>
+	<br>
+	<br>
+	<div class="input txtcenter"><a href="javascript:void(0)" onclick="ruleSave()" class="mdc-bg-light-green-200 mdc-text-green-900">Sauvegarder la r&egrave;gle</a></div>
+</div>
+<script type="text/javascript">
+	function ruleSave() {
+		var data = "";
+		var inputs = document.querySelectorAll("#rule input,#rule textarea");
+		for (i=0; i<inputs.length; i++) {
+			var value = inputs[i].value.replaceAll("\n","%0D");
+			var value = value.replaceAll("&","%26");
+			var value = value.replaceAll("=","%3D");
+			var value = value.replaceAll("/","%2F");
+			data += "&"+inputs[i].id+"="+value;
+		}
+		var r = new XMLHttpRequest();
+		r.open("GET", "/rule.do?action=save"+data, true);
+		r.setRequestHeader('Content-Type', 'text/plain; charset=utf-8');
+		r.onreadystatechange = function () {
+			if (r.readyState != 4 || r.status != 200) return;
+			data = JSON.parse(r.responseText);
+			if(data.result == true){
+				window.location = '/rules.html';
+			}else{
+				showMessage(data.message, "error");
+			}
+		};
+		r.send();
+	}
+</script>
+{{ end }}

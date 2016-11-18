@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="{$sServiceLabel} - {$sServiceDescription}" />
+	<meta name="keywords" content="{$sServiceName}" />
+	<meta name="author" content="{$sAuthor}" />
+	<meta name="copyright" content="{$sCopyright}" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" type="image/png" href="/assets/images/wapiti.ico" />
+
+	<link rel='stylesheet' href="/assets/css/knacss.css" type="text/css" />
+	<link rel='stylesheet' href="/assets/css/font-awesome.css" type="text/css" />
+	<link rel='stylesheet' href="/assets/css/material-design-color-palette.css" type="text/css" />
+	<link rel='stylesheet' href="/assets/css/style.css" type="text/css" />
+
+	<title>{$sServiceLabel} :: {{ .title }}</title>
+
+	<script type="text/javascript">
+		String.prototype.replaceAll = function(target, replacement) {
+			return this.split(target).join(replacement);
+		};
+		function autoRefresh() {
+			var r = new XMLHttpRequest();
+			r.open("GET", autoRefreshParams.url, true);
+			r.onreadystatechange = function () {
+				if (r.readyState != 4 || r.status != 200) return;
+
+				var html = document.createElement( 'html' );
+				html.innerHTML = r.responseText;
+				document.querySelector(autoRefreshParams.container).innerHTML = html.querySelector(autoRefreshParams.container).innerHTML;
+
+				setTimeout(autoRefresh, autoRefreshParams.timeout);
+			};
+			r.onerror = function(e) {
+				showMessage("Erreur d'actualisation de la page !","alert");
+				setTimeout(autoRefresh, autoRefreshParams.timeout);
+			};
+			r.send();
+		}
+		function showMessage(message, type){
+			if (type === undefined) type = "info";
+			document.getElementById("message").classList.remove("mdc-bg-green-800");
+			document.getElementById("message").classList.remove("mdc-bg-red-300");
+			document.getElementById("message").classList.remove("mdc-bg-amber-600");
+			document.getElementById("message").innerHTML = message;
+
+			switch(type){
+				case "info":
+					document.getElementById("message").classList.add("mdc-bg-green-800");
+					break;
+				case "alert":
+					document.getElementById("message").classList.add("mdc-bg-amber-600");
+					break;
+				case "error":
+					document.getElementById("message").classList.add("mdc-bg-red-300");
+					break;
+			}
+
+			document.getElementById("message").style.opacity = 1;
+
+			setTimeout(function(){
+				document.getElementById("message").style.opacity = 0;
+			}, 3000);
+		}
+	</script>
+</head>
+
+<body lang="fr">
+	<div id="page">
+		<div id="message"></div>
+		<div id="header" class="pal mdc-bg-light-green-200">
+			<p class="h3-like inbl"><img src="/assets/images/wapiti.png" class="w50p mrl" alt="logo"/><a href="/index.html" class="bold mdc-text-light-green-900">Wapiti</a> > {$sHtmlNavLabel}</p>
+			<p class="inbl fr italic">Gestionnaire de paquets pour Windows.</p>
+		</div>
+
+		<div id="content" class="pal">
+			{{ template "content" }}
+		</div>
+
+		<div id="footer" class="pas mdc-bg-light-green-100">
+			<p class="txtcenter">{$sServiceLabel} v{$sVersion} {$sCopyright}</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{{ define "content" }}
+<div id="script">
+	<p>Vous voici dans le concepteur de script Wapiti.</p>
+	<p class="h5-like"><i class="fa fa-cog mrs"></i>Param&egrave;tres du package</p>
+	<div class="quote">
+		<input type="hidden" name="id" id="id" value="{$iId}">
+		<div class="input"><label for="packagename">Nom du package :</label><input type="text" name="packagename" id="packagename" value="{$sPackageName}"></div>
+		<div class="input"><label for="packageversion">Version du package :</label><input type="text" class="w100p" name="packageversion" id="packageversion" value="{$sPackageVersion}" disabled></div>
+		<div class="input"><label for="packagecreator">Cr&eacute;ateur du package :</label><input type="text" name="packagecreator" id="packagecreator" value="{$sPackageCreator}"></div>
+		<div class="input"><label for="packagelanguage">Langue du package :</label>
+			<select name="packagelanguage" id="packagelanguage">
+				<option value="1036" {$sPackageLanguage1036}>Fran&ccedil;ais</option>
+			</select>
+		</div>
+		<div class="input"><label for="packageinstallmode">Mode d'installation du package :</label>
+			<select name="packageinstallmode" id="packageinstallmode" multiple="multiple" class="w150p">
+				<option value="boot" {$sPackageInstallModeBoot}>D&eacute;marrage</option>
+				<option value="register" {$sPackageInstallModeRegister}>Enregistrement</option>
+				<option value="manual" {$sPackageInstallModeManual}>Manuelle</option>
+			</select>
+		</div>
+		<div class="input"><label for="packagedependencies">D&eacute;pendances du package :</label><input type="text" name="packagedependencies" id="packagedependencies" class="w400p" value="{$sPackageDependencies}"></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cog mrs"></i>Param&egrave;tres du produit</p>
+	<div class="quote">
+		<div class="input"><label for="productname">Nom du produit :</label><input type="text" name="productname" id="productname" class="w400p" value="{$sProductName}"></div>
+		<div class="input"><label for="productdescription">Description du produit :</label><input type="text" name="productdescription" id="productdescription" class="w400p" value="{$sProductDescription}"></div>
+		<div class="input"><label for="productversion">Version du produit :</label><input type="text" name="productversion" id="productversion" value="{$sProductVersion}"></div>
+		<div class="input"><label for="productprocesses">Processus du produit :</label><input type="text" name="productprocesses" id="productprocesses" value="{$sProductProcesses}"></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cogs mrs"></i>Script d'installation</p>
+	<div class="quote">
+		<div class="input"><textarea name="functioninstall" id="functioninstall" class="w100 h200p">{$sFunctionInstall}</textarea></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cogs mrs"></i>Script de suppression</p>
+	<div class="quote">
+		<div class="input"><textarea name="functionremove" id="functionremove" class="w100 h200p">{$sFunctionRemove}</textarea></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cogs mrs"></i>Script de r&eacute;paration</p>
+	<div class="quote">
+		<div class="input"><textarea name="functionrepair" id="functionrepair" class="w100 h200p">{$sFunctionRepair}</textarea></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cogs mrs"></i>Script de v&eacute;rification</p>
+	<div class="quote">
+		<div class="input"><textarea name="functioncheck" id="functioncheck" class="w100 h200p">{$sFunctionCheck}</textarea></div>
+	</div>
+	<p class="h5-like"><i class="fa fa-cogs mrs"></i>Script d'ex&eacute;cution</p>
+	<div class="quote">
+		<div class="input"><textarea name="functionperform" id="functionperform" class="w100 h200p">{$sFunctionPerform}</textarea></div>
+	</div>
+	<br>
+	<br>
+	<div class="input txtcenter"><a href="javascript:void(0)" onclick="scriptSave()" class="mdc-bg-light-green-200 mdc-text-green-900">Sauvegarder le script</a></div>
+</div>
+<script type="text/javascript">
+	function scriptSave() {
+		var data = "";
+		var inputs = document.querySelectorAll("#script input,#script textarea");
+		for (i=0; i<inputs.length; i++) {
+			var value = inputs[i].value.replaceAll("\n","%0D");
+			var value = value.replaceAll("&","%26");
+			var value = value.replaceAll("=","%3D");
+			var value = value.replaceAll("/","%2F");
+			data += "&"+inputs[i].id+"="+value;
+		}
+		var selects = document.querySelectorAll("#script select");
+		for (i=0; i<selects.length; i++) {
+			var values = Array();
+			var options = selects[i].querySelectorAll("option");
+			for (j=0; j<options.length; j++) {
+				if (options[j].selected) values.push(options[j].value);
+			}
+			data += "&"+selects[i].id+"="+values.join("|");
+		}
+		var r = new XMLHttpRequest();
+		r.open("GET", "/script.do?action=save"+data, true);
+		r.setRequestHeader('Content-Type', 'text/plain; charset=utf-8');
+		r.onreadystatechange = function () {
+			if (r.readyState != 4 || r.status != 200) return;
+			data = JSON.parse(r.responseText);
+			if(data.result == true){
+				window.location = '/scripts.html';
+			}else{
+				showMessage(data.message, "error");
+			}
+		};
+		r.send();
+	}
+</script>
+{{ end }}

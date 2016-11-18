@@ -1,0 +1,44 @@
+{{ define "content" }}
+<div id="rules">
+	<p>G&eacute;rez les r&egrave;gles de d&eacute;ploiement de vos packages Wapiti.</p>
+	<p class="h5-like"><i class="fa fa-magic mrs"></i>R&egrave;gles</p>
+	<div class="quote">
+		<table>
+			<thead>
+				<tr>
+					<th class="txtcenter">Nom</th>
+					<th class="txtcenter">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr><td>Nouvelle r&egrave;gle...</td><td><a href="/rule" class="mrl bold mdc-text-green-900">Cr&eacute;er</a></td></tr>
+				{$sHtmlRules}
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	function ruleAction(action, id) {
+		var r = new XMLHttpRequest();
+		r.open("GET", "/rule.do?action="+action+"&id="+id, true);
+		r.onreadystatechange = function () {
+			if (r.readyState != 4 || r.status != 200) return;
+			data = JSON.parse(r.responseText);
+			if(data.result == true){
+				switch(action){
+					case "run":
+						showMessage('Demande prise en compte correctement. Le package sera ajout&eacute; au d&eacute;p&ocirc;t local.');
+						break;
+					default:
+						showMessage("Demande prise en compte correctement");
+				}
+			}else{
+				showMessage(data.message, "error");
+			}
+		};
+		r.send();
+	}
+	var autoRefreshParams = {url: "/rules", container: "#rules", timeout: 2000};
+	setTimeout(autoRefresh, autoRefreshParams.timeout);
+</script>
+{{ end }}

@@ -1,0 +1,44 @@
+{{ define "content" }}
+<div id="scripts">
+	<p>G&eacute;rez votre biblioth&egrave;que de scripts Wapiti.</p>
+	<p class="h5-like"><i class="fa fa-file-code-o mrs"></i>Scripts locaux</p>
+	<div class="quote">
+		<table>
+			<thead>
+				<tr>
+					<th class="txtcenter">Script</th>
+					<th class="txtcenter">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr><td>Nouveau script...</td><td><a href="/script" class="mrl bold mdc-text-green-900">Cr&eacute;er</a></td></tr>
+				{$sHtmlScripts}
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	function scriptAction(action, id) {
+		var r = new XMLHttpRequest();
+		r.open("GET", "/script.do?action="+action+"&id="+id, true);
+		r.onreadystatechange = function () {
+			if (r.readyState != 4 || r.status != 200) return;
+			data = JSON.parse(r.responseText);
+			if(data.result == true){
+				switch(action){
+					case "compile":
+						showMessage('Demande prise en compte correctement. Le package sera ajout&eacute; au d&eacute;p&ocirc;t local.');
+						break;
+					default:
+						showMessage("Demande prise en compte correctement");
+				}
+			}else{
+				showMessage(data.message, "error");
+			}
+		};
+		r.send();
+	}
+	var autoRefreshParams = {url: "/scripts", container: "#scripts", timeout: 2000};
+	setTimeout(autoRefresh, autoRefreshParams.timeout);
+</script>
+{{ end }}

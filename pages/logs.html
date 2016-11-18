@@ -1,0 +1,24 @@
+{{ define "content" }}
+<div id="logs">
+	<p>Vous trouverez ci-dessous le contenu de journaux d'exploitation des modules Wapiti.</p>
+	<p class="h5-like"><i class="fa fa-file mrs"></i>{$sLogfile}</p>
+	<div class="quote">
+	{$sHtmlLogs}
+	</div>
+	<p class="h5-like"><i class="fa fa-table mrs"></i>{$sDbfile}</p>
+	<div class="quote">
+	<table>
+		<thead>
+			<tr>
+				<th class="txtcenter">Date/Heure</th>
+				<th class="txtcenter">Processus</th>
+				<th class="txtcenter">Message</th>
+			</tr>
+		</thead>
+		<tbody>
+			{$sHtmlDbLogs}
+		</tbody>
+	</table>
+	</div>
+</div>
+{{ end }}
